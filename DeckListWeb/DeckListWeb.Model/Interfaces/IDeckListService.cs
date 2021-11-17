@@ -12,7 +12,7 @@ namespace DeckListWeb.Model.Interfaces
 
         Task<DeckModel> GetDeckAsync(int id);
 
-        AllDecksModel GetAllDecks(int page);
+        Task<AllDecksModel> GetAllDecks(int page);
 
         Task<DeckModel> ShuffleDeckAsync(int id);
 

@@ -20,11 +20,11 @@ namespace DeckListWeb.Model.Services
             Database = baseRepository;
         }
 
-        public AllDecksModel GetAllDecks(int page)
+        public async Task<AllDecksModel> GetAllDecks(int page)
         {
             const int pageSize = 15;
 
-            IEnumerable<Deck> decksList = Database.Decks.GetAll();
+            IEnumerable<Deck> decksList = await Database.Decks.GetAllAsync();
 
             var decksListModel = ConvertDeckList(decksList);
 

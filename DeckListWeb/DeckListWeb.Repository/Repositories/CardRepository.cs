@@ -23,6 +23,11 @@ namespace DeckListWeb.Repository.Repositories
             return _db.Cards;
         }
 
+        public async Task<IEnumerable<Card>> GetAllAsync()
+        {
+            return await Task.Run(() => GetAll());
+        }
+
         public async Task<Card> GetById(int id)
         {
             return await _db.Cards.FindAsync(id);

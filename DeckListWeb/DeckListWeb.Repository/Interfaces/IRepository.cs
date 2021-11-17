@@ -7,6 +7,7 @@ namespace DeckListWeb.Repository.Interfaces
     public interface IRepository<T> where T : class
     {
         IEnumerable<T> GetAll();
+        Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetById(int id);
         Task<T> GetByName(string name);
         Task<T> GetByNumber(int number);

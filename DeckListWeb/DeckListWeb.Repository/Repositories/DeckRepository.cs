@@ -23,6 +23,11 @@ namespace DeckListWeb.Repository.Repositories
             return _db.Decks.Include(d => d.Cards).OrderBy(d => d.Number);
         }
 
+        public async Task<IEnumerable<Deck>> GetAllAsync()
+        {
+            return await Task.Run(() => GetAll());
+        }
+
         public async Task<Deck> GetById(int id)
         {
             return await _db.Decks

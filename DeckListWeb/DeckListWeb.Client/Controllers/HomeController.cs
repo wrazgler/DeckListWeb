@@ -17,9 +17,9 @@ namespace DeckListWeb.Client.Controllers
             _deckListService = deckService;
         }
         [HttpGet]
-        public IActionResult GetAllDecks(int page = 1)
+        public async Task<IActionResult> GetAllDecks(int page = 1)
         {
-            return View(_deckListService.GetAllDecks(page));
+            return View(await _deckListService.GetAllDecks(page));
         }
 
         [HttpGet]
@@ -32,9 +32,9 @@ namespace DeckListWeb.Client.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddDeck(int page = 1)
+        public async Task<IActionResult> AddDeck(int page = 1)
         {
-            var model = new AddDeckViewModel { Page = page };
+            var model = await Task.Run(() => new AddDeckViewModel { Page = page } );
 
             return View(model);
         }
