@@ -1,0 +1,50 @@
+﻿@model DeckListWeb.Model.Models.AllDecksModel
+
+@{
+    ViewBag.Title = "Cписок колод";
+}
+
+<div class="text-center" style="margin-top: 20px;">
+
+    <p style="font-size: 30px;">
+        <a style="margin-bottom: 20px;" asp-action="AddDeck" asp-controller="Home" asp-route-page="@Model.PageModel.PageNumber">Создать колоду</a>
+    </p>
+
+    @if (Model != null && Model.Decks.Any())
+    {
+        <table class="table">
+            @foreach (var deck in Model.Decks)
+            {
+                <tr>
+                    <td width="60%">
+                        @if (deck.Name != null)
+                        {
+                            <a asp-action="GetDeck" asp-controller="Home" asp-route-id="@deck.Id" asp-route-page="@Model.PageModel.PageNumber">@deck.Name</a>
+                        }
+                        else
+                        {
+                            <a asp-action="GetDeck" asp-controller="Home" asp-route-id="@deck.Id" asp-route-page="@Model.PageModel.PageNumber"> Колода @deck.Number</a>
+                        }
+                    </td>
+                    <td width="10%"><a style="font-size: 12px;" class="btn btn-sm btn-primary" asp-action="EditDeck" asp-controller="Home" asp-route-id="@deck.Id" asp-route-page="@Model.PageModel.PageNumber" asp-route-previous="GetAllDecks">Переименовать</a></td>
+                    <td width="10%"><a style="font-size: 12px;" class="btn btn-sm btn-primary" asp-action="ShuffleDeck" asp-controller="Home" asp-route-id="@deck.Id" asp-route-page="@Model.PageModel.PageNumber" asp-route-previous="GetAllDecks">Перетасовать</a></td>
+                    <td width="10%"><a style="font-size: 12px;" class="btn btn-sm btn-primary" asp-action="ManualShuffleDeck" asp-controller="Home" asp-route-id="@deck.Id" asp-route-page="@Model.PageModel.PageNumber" asp-route-previous="GetAllDecks">Перетасовать(ручная)</a></td>
+                    <td width="10%"><a style="font-size: 12px;" class="btn btn-sm btn-danger" asp-action="DeleteDeck" asp-controller="Home" asp-route-id="@deck.Id" asp-route-page="@Model.PageModel.PageNumber" asp-route-previous="GetAllDecks">Удалить</a></td>
+                </tr>
+            }
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <page-link page-model="Model.PageModel" page-action="GetAllDecks"></page-link>
+    }
+    else
+    {
+        <h2>Список колод пуст</h2>
+    }
+</div>

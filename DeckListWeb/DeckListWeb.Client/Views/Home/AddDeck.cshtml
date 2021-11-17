@@ -1,0 +1,36 @@
+﻿@model DeckListWeb.Client.ViewModels.AddDeckViewModel
+
+@{
+    ViewBag.Title = "Создать колоду";
+}
+
+<table class="table table-borderless">
+    <tr>
+        <td width="30%"></td>
+        <td width="40%">
+            <form asp-action="AddDeck" asp-controller="Home" asp-antiforgery="true" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="@Model.Page" />
+                    <label asp-for="Name" class="control-label">Имя</label>
+                    <input type="text" asp-for="Name" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <table class="table table-borderless">
+                        <tr>
+                            <td width="30%"></td>
+                            <td>
+                                <input type="submit" value="Сохранить" class="btn btn-primary" />
+                            </td>
+                            <td>
+                                <a class="btn btn-outline-secondary" asp-action="GetAllDecks" asp-controller="Home" asp-route-page="@Model.Page">Назад</a>
+                            </td>
+                            <td width="30%"></td>
+                        </tr>
+                    </table>
+                </div>
+            </form>
+        </td>
+        <td width="30%"></td>
+    </tr>
+</table>

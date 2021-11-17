@@ -1,0 +1,76 @@
+﻿@model DeckListWeb.Client.ViewModels.DeleteDeckViewModel
+
+@{
+    ViewBag.Title = "Удалить колоду";
+}
+
+<div class="text-center">
+    @if (Model != null && Model.Deck.Cards.Any())
+    {
+        <h2>
+            @if (Model.Deck.Name != null)
+            {
+                <a>@Model.Deck.Name</a>
+            }
+            else
+            {
+                <a>Колода @Model.Deck.Number</a>
+            }
+        </h2>
+
+        <table class="table table-borderless">
+            <tr>
+                <td width="40%"></td>
+                <td width="10%">
+                    <form asp-controller="Home" asp-action="DeleteDeck" asp-antiforgery="true" method="post">
+                        <input type="hidden" asp-for="@Model.Page" />
+                        <input type="hidden" asp-for="@Model.PreviousPage" />
+                        <input type="hidden" asp-for="@Model.Deck.Id" />
+                        <input type="hidden" asp-for="@Model.Deck.Name" />
+                        <input type="hidden" asp-for="@Model.Deck.Number" />
+                        <input type="hidden" asp-for="@Model.Deck.Cards" />
+                        <input type="submit" class="btn btn-danger" value="Удалить" />
+                    </form>
+                </td>
+                <td width="10%">
+                    @if (Model.PreviousPage == "GetDeck")
+                    {
+                        <a class="btn btn-primary" asp-action="GetDeck" asp-controller="Home" asp-route-id="@Model.Deck.Id" asp-route-page="@Model.Page">Назад</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary" asp-action="GetAllDecks" asp-controller="Home" asp-route-page="@Model.Page">Назад</a>
+                    }
+                </td>
+                <td width="40%"></td>
+            </tr>
+        </table>
+
+        <table class="table">
+            <tr style="font-weight: bold;">
+                <td width="50%"><a>Масть</a></td>
+                <td width="50%"><a>Значение</a></td>
+            </tr>
+
+            @foreach (var card in Model.Deck.Cards.OrderBy(c => c.Position))
+            {
+                <tr>
+                    <td><a>@card.Suit</a></td>
+                    <td><a>@card.Value</a></td>
+                </tr>
+            }
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+    }
+    else
+    {
+        <div style="margin-top: 10%">
+            <h2>Колода не существует</h2>
+
+            <p style="margin-top: 30px"><a class="btn btn-lg btn-primary" asp-action="GetAllDecks" asp-controller="Home">Назад</a></p>
+        </div>
+    }
+</div>

@@ -1,0 +1,47 @@
+﻿@model DeckListWeb.Client.ViewModels.EditDeckViewModel
+
+@{
+    ViewBag.Title = "Переименовать колоду";
+}
+
+<table class="table table-borderless">
+    <tr>
+        <td width="30%"></td>
+        <td width="40%">
+            <form asp-action="EditDeck" asp-controller="Home" asp-antiforgery="true" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="@Model.Page" />
+                    <input type="hidden" asp-for="@Model.PreviousPage" />
+                    <input type="hidden" asp-for="@Model.Id" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Name" class="control-label">Имя</label>
+                    <input type="text" asp-for="@Model.Name" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <table class="table table-borderless">
+                        <tr>
+                            <td width="30%"></td>
+                            <td>
+                                <input type="submit" value="Сохранить" class="btn btn-primary" />
+                            </td>
+                            <td>
+                                @if (Model.PreviousPage == "GetDeck")
+                                {
+                                    <a class="btn btn-outline-secondary" asp-action="GetDeck" asp-controller="Home" asp-route-id="@Model.Id" asp-route-page="@Model.Page">Назад</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-outline-secondary" asp-action="GetAllDecks" asp-controller="Home" asp-route-page="@Model.Page">Назад</a>
+                                }
+                            </td>
+                            <td width="30%"></td>
+                        </tr>
+                    </table>
+                </div>
+            </form>
+        </td>
+        <td width="30%"></td>
+    </tr>
+</table>

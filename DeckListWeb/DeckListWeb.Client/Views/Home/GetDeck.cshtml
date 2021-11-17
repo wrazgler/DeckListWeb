@@ -1,0 +1,67 @@
+﻿@model DeckListWeb.Client.ViewModels.GetDeckViewModel
+@{
+    if (Model.Deck.Name != null)
+    {
+        ViewBag.Title = Model.Deck.Name;
+    }
+    else
+    {
+        ViewBag.Title = "Колода" + Model.Deck.Number;
+    }
+}
+
+<div class="text-center">
+
+    @if (Model != null && Model.Deck.Cards.Any())
+    {
+        <table class="table table-borderless">
+            <tr>
+                <td width="15%"></td>
+                <td width="10%"><a asp-action="GetAllDecks" asp-controller="Home" asp-route-page="@Model.Page">Назад</a></td>
+                <td width="10%"><a asp-action="EditDeck" asp-controller="Home" asp-route-id="@Model.Deck.Id" asp-route-page="@Model.Page" asp-route-previous="GetDeck">Переименовать</a></td>
+                <td width="16%"><a asp-action="ShuffleDeck" asp-controller="Home" asp-route-id="@Model.Deck.Id" asp-route-page="@Model.Page" asp-route-previous="GetDeck">Перетасовать</a></td>
+                <td width="24%"><a asp-action="ManualShuffleDeck" asp-controller="Home" asp-route-id="@Model.Deck.Id" asp-route-page="@Model.Page" asp-route-previous="GetDeck">Перетасовать(ручная)</a></td>
+                <td width="10%"><a style="color: #FF0000" asp-action="DeleteDeck" asp-controller="Home" asp-route-id="@Model.Deck.Id" asp-route-page="@Model.Page" asp-route-previous="GetDeck">Удалить</a></td>
+                <td width="15%"></td>
+            </tr>
+        </table>
+
+        <h2>
+            @if (Model.Deck.Name != null)
+            {
+                <a>@Model.Deck.Name</a>
+            }
+            else
+            {
+                <a>Колода @Model.Deck.Number</a>
+            }
+        </h2>
+
+        <table class="table">
+            <tr style="font-weight: bold;">
+                <td width="50%"><a>Масть</a></td>
+                <td width="50%"><a>Значение</a></td>
+            </tr>
+
+            @foreach (var card in Model.Deck.Cards.OrderBy(c => c.Position))
+            {
+                <tr>
+                    <td><a>@card.Suit</a></td>
+                    <td><a>@card.Value</a></td>
+                </tr>
+            }
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+    }
+    else
+    {
+        <div style="margin-top: 10%">
+            <h2>Колода не существует</h2>
+
+            <p style="margin-top: 30px"><a class="btn btn-lg btn-primary" asp-action="GetAllDecks" asp-controller="Home">Назад</a></p>
+        </div>
+    }
+</div>
