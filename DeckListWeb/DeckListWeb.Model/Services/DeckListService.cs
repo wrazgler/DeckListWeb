@@ -22,18 +22,16 @@ namespace DeckListWeb.Model.Services
 
         public async Task<AllDecksModel> GetAllDecks(int page)
         {
-            const int pageSize = 15;
-
             IEnumerable<Deck> decksList = await Database.Decks.GetAllAsync();
 
-            var decksListModel = ConvertDeckList(decksList);
+            var newDeckList = ConvertDeckList(decksList);
 
-            var count = decksListModel.Count();
-            var items = decksListModel.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var count = newDeckList.Count();
+            var items = newDeckList.Skip((page - 1) * PageModel.GetPageSize()).Take(PageModel.GetPageSize()).ToList();
 
             var allDecksModel = new AllDecksModel
             {
-                PageModel = new PageModel(count, page, pageSize),
+                PageModel = new PageModel(count, page),
                 Decks = items
             };
 
@@ -174,7 +172,7 @@ namespace DeckListWeb.Model.Services
                     Value = c.Value
                 })
                 .ToList();
-            var deckModel = new DeckModel
+            var newDeck = new DeckModel
             {
                 Id = deck.Id,
                 Name = deck.Name,
@@ -182,12 +180,12 @@ namespace DeckListWeb.Model.Services
                 Cards = cards
             };
           
-            return deckModel;
+            return newDeck;
         }
 
         public IEnumerable<DeckModel> ConvertDeckList(IEnumerable<Deck> decksList)
         {
-            var decksListModel = new List<DeckModel>();
+            var newDecksList = new List<DeckModel>();
 
             foreach (var deck in decksList)
             {
@@ -208,10 +206,10 @@ namespace DeckListWeb.Model.Services
                     Number = deck.Number,
                     Cards = cards
                 };
-                decksListModel.Add(deckModel);
+                newDecksList.Add(deckModel);
             }
 
-            return decksListModel;
+            return newDecksList;
         }
     }
 }

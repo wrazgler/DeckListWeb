@@ -15,10 +15,10 @@ namespace DeckListWeb.Repository
             if (db.Decks.Any()) 
                 return;
 
-            var deck1 = new Deck { Number = 1 };
-            db.Decks.Add(deck1);
+            var newdeck = new Deck { Number = 1 };
+            db.Decks.Add(newdeck);
 
-            deck1.CreateDeck(db, deck1);
+            newdeck.CreateDeck(db, newdeck);
 
             db.SaveChanges();
         }
