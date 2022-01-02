@@ -23,7 +23,7 @@ namespace DeckListWeb.Client
                 {
                     var factory = services.GetRequiredService<IRepositoryContextFactory>();
                     var contextOptions = services.GetRequiredService<IContextOptions>();
-                    using (var context = factory.CreateDbContext(contextOptions.ConnectionString, contextOptions.IsPostgreSql))
+                    using (var context = factory.CreateDbContext(contextOptions.ConnectionString))
                     {
                         DbInitializer.Initialize(context);
                     }

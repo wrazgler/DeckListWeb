@@ -13,10 +13,10 @@ namespace DeckListWeb.Repository.Repositories
         protected CardRepository CardRepository { get; set; }
         protected DeckRepository DeckRepository { get; set; }
 
-        public BaseRepository(string connectionString, bool isPostgreSql, IRepositoryContextFactory contextFactory)
+        public BaseRepository(string connectionString, IRepositoryContextFactory contextFactory)
         {
             ContextFactory = contextFactory;
-            Database = ContextFactory.CreateDbContext(connectionString, isPostgreSql);
+            Database = ContextFactory.CreateDbContext(connectionString);
         }
 
         public IRepository<Card> Cards

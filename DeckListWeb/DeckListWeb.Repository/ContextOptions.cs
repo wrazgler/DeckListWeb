@@ -5,6 +5,5 @@ namespace DeckListWeb.Repository
     public class ContextOptions : IContextOptions
     {
         public string ConnectionString { get; set; }
-        public bool IsPostgreSql { get; set; }
     }
 }

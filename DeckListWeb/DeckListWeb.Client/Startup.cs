@@ -1,3 +1,5 @@
+using System;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +12,7 @@ using DeckListWeb.Model.Services;
 using DeckListWeb.Repository;
 using DeckListWeb.Repository.Factories;
 using DeckListWeb.Repository.Interfaces;
+using DeckListWeb.Repository.Models;
 using DeckListWeb.Repository.Repositories;
 
 namespace DeckListWeb.Client
@@ -24,21 +27,31 @@ namespace DeckListWeb.Client
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
-            //var connection = Configuration.GetConnectionString("MSSQLConnection");
-            var connection = Configuration.GetConnectionString("PostgreSQLConnection");
-
-            var isPostgreSql = connection == Configuration.GetConnectionString("PostgreSQLConnection");
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddScoped<IContextOptions>(contextOptions =>
                 new ContextOptions
                 {
-                    ConnectionString = connection,
-                    IsPostgreSql = isPostgreSql
+                    ConnectionString = connectionString
                 });
 
-            services.AddScoped<IRepositoryContextFactory, RepositoryContextFactory>();
+            var database = new Database(Configuration);
+
+            var currentSQL = database.GetSQL(connectionString);
+            switch (currentSQL)
+            {
+                case DatabaseState.PostgeSQL:
+                    services.AddScoped<IRepositoryContextFactory, PostreSQLContextFactory>();
+                    break;
+                case DatabaseState.MSSQL:
+                    services.AddScoped<IRepositoryContextFactory, MSSQLContextFactory>();
+                    break;
+                default:
+                    throw new Exception("SQl doesn't choose");
+            }
+
             services.AddScoped<IBaseRepository>(provider =>
-                new BaseRepository(connection, isPostgreSql,
+                new BaseRepository(connectionString,
                     provider.GetService<IRepositoryContextFactory>()));
             services.AddScoped<IDeckListService, DeckListService>();
             services.AddControllersWithViews();
