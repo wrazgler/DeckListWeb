@@ -14,9 +14,7 @@ namespace DeckListWeb.Model.Interfaces
 
         Task<AllDecksModel> GetAllDecks(int page);
 
-        Task<DeckModel> ShuffleDeckAsync(int id);
-
-        Task<DeckModel> ManualShuffleDeckAsync(int id);
+        Task<DeckModel> ShuffleDeckAsync(IShuffleStrategy shuffleStrategy, int id);
 
         Task<DeckModel> EditDeckAsync(int id, string name);
     }

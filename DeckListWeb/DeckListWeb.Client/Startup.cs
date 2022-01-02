@@ -24,8 +24,8 @@ namespace DeckListWeb.Client
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
-            var connection = Configuration.GetConnectionString("MSSQLConnection");
-            //var connection = Configuration.GetConnectionString("PostgreSQLConnection");
+            //var connection = Configuration.GetConnectionString("MSSQLConnection");
+            var connection = Configuration.GetConnectionString("PostgreSQLConnection");
 
             var isPostgreSql = connection == Configuration.GetConnectionString("PostgreSQLConnection");
 

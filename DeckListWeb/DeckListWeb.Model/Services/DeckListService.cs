@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,7 +23,7 @@ namespace DeckListWeb.Model.Services
         {
             IEnumerable<Deck> decksList = await Database.Decks.GetAllAsync();
 
-            var newDeckList = ConvertDeckList(decksList);
+            var newDeckList = ConvertToModel.ConvertDeckList(decksList);
 
             var count = newDeckList.Count();
             var items = newDeckList.Skip((page - 1) * PageModel.GetPageSize()).Take(PageModel.GetPageSize()).ToList();
@@ -42,7 +41,7 @@ namespace DeckListWeb.Model.Services
         {
             var deck = await Database.Decks.GetById(id);
 
-            return ConvertDeck(deck);
+            return ConvertToModel.ConvertDeck(deck);
         }
 
         public async Task AddDeckAsync(string name)
@@ -87,129 +86,14 @@ namespace DeckListWeb.Model.Services
 
             await Database.Save();
 
-            return ConvertDeck(deck);
+            return ConvertToModel.ConvertDeck(deck);
         }
 
-        public async Task<DeckModel> ShuffleDeckAsync(int id)
+        public async Task<DeckModel> ShuffleDeckAsync(IShuffleStrategy shuffleStrategy, int id)
         {
-            var deck = await Database.Decks.GetById(id);
+            var deck = await shuffleStrategy.ShuffleDeckAsync(Database, id);
 
-            if (deck == null)
-                return null;
-
-            var rand = new Random();
-
-            foreach (var card in deck.Cards)
-            {
-                card.Position = rand.Next(deck.Cards.Count);
-            }
-
-            await Database.Save();
-
-            return ConvertDeck(deck);
-        }
-
-        public async Task<DeckModel> ManualShuffleDeckAsync(int id)
-        {
-            var deck = await Database.Decks.GetById(id);
-
-            if (deck == null)
-                return null;
-
-            var rand = new Random();
-
-            var deckShuffle = new List<Card>(deck.Cards.Count);
-            var deckHalf1Shuffle = new List<Card>(deck.Cards.Count);
-            var deckHalf2Shuffle = new List<Card>(deck.Cards.Count);
-
-            deckShuffle.AddRange(deck.Cards);
-
-            for (var i = 0; i < 25; i++)
-            {
-                deckHalf1Shuffle.AddRange(deckShuffle);
-                deckHalf2Shuffle.AddRange(deckShuffle);
-
-                var half = rand.Next(deck.Cards.Count / 2 - 10, deck.Cards.Count / 2 + 10);
-
-                deckHalf1Shuffle.RemoveRange(0, half);
-                deckHalf2Shuffle.RemoveRange(half, deck.Cards.Count - half);
-                deckShuffle.Clear();
-
-                var p = 1;
-                foreach (var card in deckHalf1Shuffle)
-                {
-                    card.Position = p;
-                    deckShuffle.Add(card);
-                    p += 2;
-                }
-                p = 2;
-                foreach (var card in deckHalf2Shuffle)
-                {
-                    card.Position = p;
-                    deckShuffle.Add(card);
-                    p += 2;
-                }
-
-                deckHalf1Shuffle.Clear();
-                deckHalf2Shuffle.Clear();
-            }
-
-            deck.Cards = deckShuffle;
-
-            await Database.Save();
-
-            return ConvertDeck(deck);
-        }
-
-        public DeckModel ConvertDeck(Deck deck)
-        {
-            var cards = deck.Cards
-                .Select(c => new CardModel
-                {
-                    Id = c.Id,
-                    Position = c.Position,
-                    Suit = c.Suit,
-                    Value = c.Value
-                })
-                .ToList();
-            var newDeck = new DeckModel
-            {
-                Id = deck.Id,
-                Name = deck.Name,
-                Number = deck.Number,
-                Cards = cards
-            };
-          
-            return newDeck;
-        }
-
-        public IEnumerable<DeckModel> ConvertDeckList(IEnumerable<Deck> decksList)
-        {
-            var newDecksList = new List<DeckModel>();
-
-            foreach (var deck in decksList)
-            {
-                var cards = deck.Cards
-                    .Select(c => new CardModel
-                    {
-                        Id = c.Id,
-                        Position = c.Position,
-                        Suit = c.Suit,
-                        Value = c.Value
-                    })
-                    .ToList();
-
-                var deckModel = new DeckModel
-                {
-                    Id = deck.Id,
-                    Name = deck.Name,
-                    Number = deck.Number,
-                    Cards = cards
-                };
-                newDecksList.Add(deckModel);
-            }
-
-            return newDecksList;
+            return deck;
         }
     }
 }

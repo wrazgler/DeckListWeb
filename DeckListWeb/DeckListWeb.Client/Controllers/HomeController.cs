@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using DeckListWeb.Client.ViewModels;
 
 using DeckListWeb.Model.Interfaces;
-using DeckListWeb.Model.Models;
+using DeckListWeb.Model.Strategies;
 
 namespace DeckListWeb.Client.Controllers
 {
@@ -89,7 +89,8 @@ namespace DeckListWeb.Client.Controllers
 
         public async Task<IActionResult> ShuffleDeck(int id = 1, int page = 1, string previous = "GetAllDecks")
         {
-            await _deckListService.ShuffleDeckAsync(id);
+            var shuffleStrategy = new StandartShuffleStrategy();
+            await _deckListService.ShuffleDeckAsync(shuffleStrategy, id);
 
             return RedirectToAction(previous, "Home", new { id = id, page = page });
         }
@@ -97,7 +98,8 @@ namespace DeckListWeb.Client.Controllers
         [HttpGet]
         public async Task<IActionResult> ManualShuffleDeck(int id = 1, int page = 1, string previous = "GetAllDecks")
         {
-            await _deckListService.ManualShuffleDeckAsync(id);
+            var shuffleStrategy = new ManualShuffleStrategy();
+            await _deckListService.ShuffleDeckAsync(shuffleStrategy, id);
 
             return RedirectToAction(previous, "Home", new { id = id, page = page });
         }

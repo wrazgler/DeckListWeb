@@ -17,4 +17,10 @@
     <ProjectReference Include="..\DeckListWeb.Repository\DeckListWeb.Repository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Strategies\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Strategies\" />
+  </ItemGroup>
 </Project>
