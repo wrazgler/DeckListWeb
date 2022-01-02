@@ -2,7 +2,7 @@
 
 namespace DeckListWeb.Model.Models
 {
-    public class AllDecksModel
+    public class DeckListModel
     {
         public IEnumerable<DeckModel> Decks { get; set; }
         public PageModel PageModel { get; set; }

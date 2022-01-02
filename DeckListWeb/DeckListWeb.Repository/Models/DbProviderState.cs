@@ -1,6 +1,6 @@
 ﻿namespace DeckListWeb.Repository.Models
 {
-    public enum DatabaseState
+    public enum DbProviderState
     {
         PostgeSQL,
         MSSQL

@@ -2,28 +2,27 @@
 
 namespace DeckListWeb.Repository.Models
 {
-    public class Database
+    public class DbProvider
     {
         private readonly string _postgreSQL;
         private readonly string _msSQL;
 
-        public Database(IConfiguration configuration)
+        public DbProvider(IConfiguration configuration)
         {
             _postgreSQL = configuration.GetConnectionString("PostgreSQLConnection");
             _msSQL = configuration.GetConnectionString("MSSQLConnection");
         }
 
-        public DatabaseState GetSQL(string connectionString)
+        public DbProviderState GetSQL(string connectionString)
         {
-            var databaseState = DatabaseState.PostgeSQL;
+            var databaseState = DbProviderState.PostgeSQL;
 
             if (connectionString == _msSQL)
             {
-                databaseState = DatabaseState.MSSQL;
+                databaseState = DbProviderState.MSSQL;
             }
 
             return databaseState;
         }
-
     }
 }

@@ -19,7 +19,7 @@ namespace DeckListWeb.Model.Services
             Database = baseRepository;
         }
 
-        public async Task<AllDecksModel> GetAllDecks(int page)
+        public async Task<DeckListModel> GetAllDecks(int page)
         {
             IEnumerable<Deck> decksList = await Database.Decks.GetAllAsync();
 
@@ -28,13 +28,13 @@ namespace DeckListWeb.Model.Services
             var count = newDeckList.Count();
             var items = newDeckList.Skip((page - 1) * PageModel.GetPageSize()).Take(PageModel.GetPageSize()).ToList();
 
-            var allDecksModel = new AllDecksModel
+            var decksListModel = new DeckListModel
             {
                 PageModel = new PageModel(count, page),
                 Decks = items
             };
 
-            return allDecksModel;
+            return decksListModel;
         }
 
         public async Task<DeckModel> GetDeckAsync(int id)

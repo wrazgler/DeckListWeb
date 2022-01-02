@@ -28,28 +28,24 @@ namespace DeckListWeb.Client
         public void ConfigureServices(IServiceCollection services)
         {
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
-
             services.AddScoped<IContextOptions>(contextOptions =>
                 new ContextOptions
                 {
                     ConnectionString = connectionString
                 });
-
-            var database = new Database(Configuration);
-
-            var currentSQL = database.GetSQL(connectionString);
+            var dbProvider = new DbProvider(Configuration);
+            var currentSQL = dbProvider.GetSQL(connectionString);
             switch (currentSQL)
             {
-                case DatabaseState.PostgeSQL:
+                case DbProviderState.PostgeSQL:
                     services.AddScoped<IRepositoryContextFactory, PostreSQLContextFactory>();
                     break;
-                case DatabaseState.MSSQL:
+                case DbProviderState.MSSQL:
                     services.AddScoped<IRepositoryContextFactory, MSSQLContextFactory>();
                     break;
                 default:
                     throw new Exception("SQl doesn't choose");
             }
-
             services.AddScoped<IBaseRepository>(provider =>
                 new BaseRepository(connectionString,
                     provider.GetService<IRepositoryContextFactory>()));
